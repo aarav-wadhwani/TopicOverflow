@@ -39,7 +39,7 @@ for char in textLines[0]:
     course = course + char
     prev_char = char
 
-#Finding the quarter through the month
+#Finding the quarter from the month
 month = ""
 for c in textLines[2]:
   if(c == ' '):
