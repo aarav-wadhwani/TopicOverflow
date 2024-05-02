@@ -17,7 +17,8 @@ def take_screenshot(pdf_path):
         image = page.get_pixmap(matrix=fitz.Matrix(4, 4))  # You can adjust the scaling factor if needed
         image.save(f"page-{i}.png")
         i = i+1
-        break #remove later
+        if(i == 2):
+            break #remove later
     
 
 # Example usage

@@ -26,22 +26,32 @@ def row_has_only_white_pixels(image_path, row_index):
     return True
 
 # Example usage
-input_image_path = "page-0.png"
+input_image_path = "page-1.png"
 img = Image.open(input_image_path)
     
 # Get the dimensions
 width, height = img.size
 
+section = 1
+row = 1
 #for each row
-for row in range(height):
+while(row < height):
     if(not row_has_only_white_pixels(input_image_path, row)):
         start = row
-        row = row + 42 #one row of text has height of 42 pixels
+        #print(row)
+        row = row + 30 #one row of text has height of 42 pixels
+        #print(row)
         while (row_has_only_white_pixels(input_image_path, row)):
-            row = row + 29 #no. of blank rows between lines: 29
+            row = row + 30 #no. of blank rows between lines: 29
+           #print(row)
             if(not row_has_only_white_pixels(input_image_path, row)):
-                row = row + 42
-        bbox = (0, start - 20, width, row+20)  # Example bounding box coordinates (left, upper, right, lower)
-        output_image_path = "output_image.png"
+                row = row + 30
+                #print(row)
+        bbox = (0, start - 20, width, row+30)  # Example bounding box coordinates (left, upper, right, lower)
+        output_image_path = f"section-{section}.png"
         extract_region(input_image_path, bbox, output_image_path)
-        break
+        section += 1
+        row += 20
+        
+    row += 1
+
