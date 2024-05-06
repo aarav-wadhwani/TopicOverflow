@@ -1,4 +1,7 @@
 from PIL import Image
+import time
+
+start_time = time.time()
 
 def extract_region(input_image_path, bbox, output_image_path):
     # Open the image
@@ -61,24 +64,4 @@ while (row < height):
         
     row += 1
 
-"""while(row < height):
-    if(not row_has_only_white_pixels(input_image_path, row)):
-        start = row
-        #print(row)
-        row = row + 42 #one row of text has height of 42 pixels
-        #print(row)
-        while (row_has_only_white_pixels(input_image_path, row)):
-            row = row + 29 #no. of blank rows between lines: 29
-           #print(row)
-            if(not row_has_only_white_pixels(input_image_path, row)):
-                row = row + 42
-                #print(row)
-
-        bbox = (0, start - 20, width, row+30)  # Example bounding box coordinates (left, upper, right, lower)
-        output_image_path = f"section-{section}.png"
-        extract_region(input_image_path, bbox, output_image_path)
-        section += 1
-        row += 20
-        
-    row += 1"""
-
+print("Process finished --- %s seconds ---" % (time.time() - start_time))
