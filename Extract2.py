@@ -5,6 +5,8 @@ import time
 import os
 
 start_time = time.time()
+global q
+q = 1
 
 def get_text_coordinates(pdf_path, search_text):
 
@@ -43,22 +45,29 @@ def take_screenshot(pdf_path, pg_no, start_row, end_row):
             width, height = img.size
             crop_section = (0, start_row, width, end_row)
             cropped_image = img.crop(crop_section)
-            cropped_image.save(f"question-{pg_no-1}.png")
+            global q
+            cropped_image.save(f"question-{q}.png")
             os.remove(f"page-{i}.png")
+            q += 1
         i += 1
 
 
-pdf_path = "sp23m126e1v1.pdf"  # Replace with the path to your PDF file
-for i in range(5):
-    search_text = f"{i}. (1"  # Text to search for in the PDF
+pdf_path = "sp19m126e1.pdf"  # Replace with the path to your PDF file
+for ch in "abc":
+    search_text = f"({ch})"  # Text to search for in the PDF
     text_coordinates = get_text_coordinates(pdf_path, search_text)
 
     for coord in text_coordinates:
-        print("Page {}, Coordinates: ({}, {}) - ({}, {})".format(coord['page'], coord['x0'], coord['y0'], coord['x1'], coord['y1']))
-        start = coord['y0']+120 #as per tests
+        print("Page {}, Question {}, Coordinates: ({}, {}) - ({}, {})".format(coord['page'], search_text, coord['x0'], coord['y0'], coord['x1'], coord['y1']))
+        start = coord['y0']+175 #as per tests
         row = start
         #while(row )
-        take_screenshot(pdf_path, coord['page'], start , row+250)
+        if(search_text == "(a)"):
+            take_screenshot(pdf_path, coord['page'], start-150, row+380)
+        elif(search_text == "(b)"):
+            take_screenshot(pdf_path, coord['page'], start+500, row+950)
+        else:
+            take_screenshot(pdf_path, coord['page'], start+1000, row+1450)
 
 
 print("Process finished --- %s seconds ---" % (time.time() - start_time))
