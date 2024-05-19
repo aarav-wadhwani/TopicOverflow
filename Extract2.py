@@ -61,7 +61,7 @@ for ch in "abc":
         print("Page {}, Question {}, Coordinates: ({}, {}) - ({}, {})".format(coord['page'], search_text, coord['x0'], coord['y0'], coord['x1'], coord['y1']))
         start = coord['y0']+175 #as per tests
         row = start
-        #while(row )
+        #Currently hard coded based on paterns of sp19m126e1.pdf, needs to be changed
         if(search_text == "(a)"):
             take_screenshot(pdf_path, coord['page'], start-150, row+380)
         elif(search_text == "(b)"):
