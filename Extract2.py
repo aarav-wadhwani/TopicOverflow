@@ -25,49 +25,79 @@ def get_text_coordinates(pdf_path, search_text):
             x0, y0, x1, y1 = text_instance
             text_coordinates.append({
                 'page': page_num + 1,  # Page number (1-based index)
-                'x0': x0,
                 'y0': y0,
-                'x1': x1,
-                'y1': y1,
             })
     
     return text_coordinates
 
-def take_screenshot(pdf_path, pg_no, start_row, end_row):
+def get_end_text_coordinates(pdf_path, page_num, search_text):
+    
     # Open the PDF file
     pdf_document = fitz.open(pdf_path)
+    page = pdf_document.load_page(page_num)
+    
+    # Search for the text on the page
+    for text_instance in page.search_for(search_text):
+        # Extract the coordinates of the text instance
+        x0, y0, x1, y1 = text_instance
+        return y0
+
+def take_screenshot(pdf_path, pg_no, start_row, end_row, isEnd):
+    # Open the PDF file
+    pdf_document = fitz.open(pdf_path)
+    
     i = 1
+    
     for page in pdf_document:
+        
         if(i == pg_no):
-            image = page.get_pixmap(matrix=fitz.Matrix(4, 4))  # You can adjust the scaling factor if needed
+           
+            #creating image of page
+            image = page.get_pixmap(matrix=fitz.Matrix(4, 4))
             image.save(f"page-{i}.png")
             img = Image.open(f"page-{i}.png")
             width, height = img.size
+            
+            #pdf text coordinate system
+            x0, y0, x1, y1 = page.rect
+            page_height = y1-y0
+            
+            #checking for edge case of last question
+            if(isEnd):
+                end_row = page_height
+            
+            #scaling text coordinates to pixel coordinates
+            start_row = start_row * (height/page_height)
+            end_row = end_row * (height/page_height)
+
+            #cropping and saving
             crop_section = (0, start_row, width, end_row)
             cropped_image = img.crop(crop_section)
             global q
             cropped_image.save(f"question-{q}.png")
             os.remove(f"page-{i}.png")
             q += 1
+            
         i += 1
 
 
-pdf_path = "sp19m126e1.pdf"  # Replace with the path to your PDF file
-for ch in "abc":
-    search_text = f"({ch})"  # Text to search for in the PDF
-    text_coordinates = get_text_coordinates(pdf_path, search_text)
 
-    for coord in text_coordinates:
-        print("Page {}, Question {}, Coordinates: ({}, {}) - ({}, {})".format(coord['page'], search_text, coord['x0'], coord['y0'], coord['x1'], coord['y1']))
-        start = coord['y0']+175 #as per tests
-        row = start
-        #Currently hard coded based on paterns of sp19m126e1.pdf, needs to be changed
-        if(search_text == "(a)"):
-            take_screenshot(pdf_path, coord['page'], start-150, row+380)
-        elif(search_text == "(b)"):
-            take_screenshot(pdf_path, coord['page'], start+500, row+950)
+pdf_path = "sp19m126e1.pdf"  # Replace with the path to your PDF file
+
+for ch in "abc":
+    
+    search_text_start = f"({ch})"  # Text to search for in the PDF
+    text_coordinates_start = get_text_coordinates(pdf_path, search_text_start)
+
+    for coord1 in text_coordinates_start:
+        
+        print("Page {}, Question {}, Coordinates: ({}))".format(coord1['page'], search_text_start, coord1['y0']))
+        start = coord1['y0']
+        end = get_end_text_coordinates(pdf_path, coord1['page']-1, f"({chr(ord(ch) + 1)})")
+        if(not end is None): 
+            take_screenshot(pdf_path, coord1['page'], start-5, end, False)
         else:
-            take_screenshot(pdf_path, coord['page'], start+1000, row+1450)
+            take_screenshot(pdf_path, coord1['page'], start-5, 0, True)
 
 
 print("Process finished --- %s seconds ---" % (time.time() - start_time))
