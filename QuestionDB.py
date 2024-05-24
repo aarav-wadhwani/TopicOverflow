@@ -1,7 +1,6 @@
 import sqlite3
 import mysql.connector
 import time
-
 from ExtractClass import Extract
 from Classify import Classifier
 
