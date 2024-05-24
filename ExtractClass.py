@@ -1,12 +1,9 @@
 from pypdf import PdfReader as reader
 from PIL import Image
 import fitz  # PyMuPDF
-import time
 import os
 
 from ExtractData import PdfData
-
-start_time = time.time()
 
 class Extract:
     
@@ -87,7 +84,7 @@ class Extract:
 
                 # adding to list of questions to add to db
                 pd = PdfData(self.pdf_path)
-                self.questions.append((pd.getCourse(), pd.getProf(), pd.getDate(), f"{self.pdf_path}-question-{q}.png", "Partial Derivatives"))
+                self.questions.append((pd.getCourse(), pd.getProf(), pd.getDate(), f"{self.pdf_path}-question-{q}.png"))
                 os.remove(f"page-{i}.png")
                 q += 1
                 
@@ -111,7 +108,3 @@ class Extract:
                     self.take_screenshot(coord1['page'], start-5, 0, True)
         
         return self.questions
-
-
-
-print("Process finished --- %s seconds ---" % (time.time() - start_time))
