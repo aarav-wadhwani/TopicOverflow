@@ -3,7 +3,7 @@ from PIL import Image
 import fitz  # PyMuPDF
 import os
 
-from ExtractData import PdfData
+from TopicOverflow.WorkingDirectory.ExtractData import PdfData
 
 class Extract:
     
@@ -42,11 +42,15 @@ class Extract:
         pdf_document = fitz.open(self.pdf_path)
         page = pdf_document.load_page(page_num)
         
+        text_coordinates = []
+
         # Search for the text on the page
         for text_instance in page.search_for(search_text):
             # Extract the coordinates of the text instance
             x0, y0, x1, y1 = text_instance
-            return y0
+            text_coordinates.append(y0)
+        
+        return text_coordinates
 
     def take_screenshot(self, pg_no, start_row, end_row, isEnd):
         # Open the PDF file
@@ -97,14 +101,24 @@ class Extract:
             search_text_start = f"({ch})"  # Text to search for in the PDF
             text_coordinates_start = self.get_text_coordinates(search_text_start)
 
+            count = 0
             for coord1 in text_coordinates_start:
                 
                 print("Page {}, Question {}, Coordinates: ({}))".format(coord1['page'], search_text_start, coord1['y0']))
                 start = coord1['y0']
-                end = self.get_end_text_coordinates(coord1['page']-1, f"({chr(ord(ch) + 1)})")
+                end = None
+                count2 = 0
+                for coord2 in  self.get_end_text_coordinates(coord1['page']-1, f"({chr(ord(ch) + 1)})"):
+                    if(count == count2): 
+                        end = coord2
+                        break
+                    count2 += 1
+
                 if(not end is None): 
                     self.take_screenshot(coord1['page'], start-5, end, False)
                 else:
                     self.take_screenshot(coord1['page'], start-5, 0, True)
+
+                count+=1
         
         return self.questions
