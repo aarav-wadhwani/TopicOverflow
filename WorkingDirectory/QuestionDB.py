@@ -1,8 +1,7 @@
-import sqlite3
 import mysql.connector
 import time
-from TopicOverflow.WorkingDirectory.ExtractClass import Extract
-from TopicOverflow.WorkingDirectory.Classify import Classifier
+from ExtractClass import Extract
+from Classify import Classifier
 import glob
 import os
 
@@ -70,7 +69,12 @@ class DBManager:
         conn.close()
 
     def load_questions(self, db_name='questions.db'):
-        conn = sqlite3.connect(db_name)
+        conn = mysql.connector.connect(
+            host=self.host,
+            user=self.user,
+            password=self.password,
+            database=self.db_name
+        )
         cursor = conn.cursor()
         cursor.execute('SELECT course, professor, year, image_path, topic FROM questions')
         question_rows = cursor.fetchall()
@@ -100,12 +104,12 @@ class DBManager:
             self.process_pdf(pdf_file)
 
 # Specify the directory containing the PDFs
-pdf_directory = r'C:\Users\wadhw\OneDrive\Desktop\COLLEGE\UW\TopicOverflow\pdfs'
+# pdf_directory = r'C:\Users\wadhw\OneDrive\Desktop\COLLEGE\UW\TopicOverflow\pdfs'
 
-dbm = DBManager('Aarav', 'Aarav@TopicOverflow!')
+# dbm = DBManager('Aarav', 'Aarav@TopicOverflow!')
 
-# Call the function to iterate and process PDFs
-dbm.iterate_pdfs(pdf_directory)
+# # Call the function to iterate and process PDFs
+# dbm.iterate_pdfs(pdf_directory)
 
 
 

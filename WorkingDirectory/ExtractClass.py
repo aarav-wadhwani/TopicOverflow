@@ -3,7 +3,7 @@ from PIL import Image
 import fitz  # PyMuPDF
 import os
 
-from TopicOverflow.WorkingDirectory.ExtractData import PdfData
+from ExtractData import PdfData
 
 class Extract:
     
