@@ -8,11 +8,11 @@ start_time = time.time()
 
 class DBManager:
     
-    def __init__(self):
+    def __init__(self, user, password):
         self.db_name = 'questions'
         self.host = 'localhost'
-        self.user = 'Aarav'
-        self.password = 'Aarav@TopicOverflow!'
+        self.user = user
+        self.password = password
     
     def create_database(self):
         # Connect to MySQL database
