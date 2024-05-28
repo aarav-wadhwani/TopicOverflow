@@ -1,8 +1,9 @@
-import sqlite3
 import mysql.connector
 import time
 from ExtractClass import Extract
 from Classify import Classifier
+import glob
+import os
 
 start_time = time.time()
 
@@ -68,7 +69,12 @@ class DBManager:
         conn.close()
 
     def load_questions(self, db_name='questions.db'):
-        conn = sqlite3.connect(db_name)
+        conn = mysql.connector.connect(
+            host=self.host,
+            user=self.user,
+            password=self.password,
+            database=self.db_name
+        )
         cursor = conn.cursor()
         cursor.execute('SELECT course, professor, year, image_path, topic FROM questions')
         question_rows = cursor.fetchall()
@@ -84,6 +90,29 @@ class DBManager:
         questions = self.extract_questions_from_pdf(pdf_path)
         for course, professor, year, image_path in questions:
             self.insert_question(course, professor, year, image_path)
+    
+    def iterate_pdfs(self, directory):
+        # Ensure the directory path is absolute
+        absolute_directory = os.path.abspath(directory)
+        
+        # Use glob to find all PDF files in the directory
+        pdf_files = glob.glob(os.path.join(absolute_directory, "*.pdf"))
+        
+        # Iterate over each PDF file
+        for pdf_file in pdf_files:
+            print(pdf_file)
+            self.process_pdf(pdf_file)
+
+# Specify the directory containing the PDFs
+# pdf_directory = r'C:\Users\wadhw\OneDrive\Desktop\COLLEGE\UW\TopicOverflow\pdfs'
+
+# dbm = DBManager('Aarav', 'Aarav@TopicOverflow!')
+
+# # Call the function to iterate and process PDFs
+# dbm.iterate_pdfs(pdf_directory)
+
+
+
 
 # Set up the database
 # create_database()
