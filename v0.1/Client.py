@@ -1,3 +1,5 @@
+'''This is the main program to be ran after ExtractClass and Organizer, respectively, have been ran'''
+
 import inquirer
 import mysql.connector
 from mysql.connector import Error
