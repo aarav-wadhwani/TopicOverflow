@@ -1,3 +1,21 @@
+"""
+This script is designed to process PNG images extracted from PDF files, classify their topics using OCR with Tesseract,
+add relevant metadata to the images, and store this metadata in a MySQL database. The main functionalities include:
+
+Metadata is defined as data of data. In this case, the original data (the image) needs to have its own data which is the course, the topic, the professor, 
+exam type, and the term.
+
+1. Extracting metadata such as professor, exam type, and term from the image filenames.
+2. Classifying the topic of the image content using Tesseract OCR and keyword matching.
+    2.1 I have willing removed the ML model since I am now training our own ML model.
+    We should have never used CLIP, it is not made for out application.
+3. Adding extracted metadata and classified topic as metadata to the images.
+4. Connecting to a MySQL database to store the image metadata.
+5. Creating a table in the database to store the metadata.
+6. Inserting the extracted metadata into the database.
+7. Reading and printing the metadata from the images.
+"""
+
 from PIL import Image, PngImagePlugin
 import os
 import pytesseract
@@ -22,7 +40,9 @@ def extract_metadata_from_filename(filename):
         term = "Unknown"
     return professor, exam_type, term
 
-
+# This classifier is really basic, in fact it is not even accurate.
+# I wrote it just for it to get along with the whole process of classiification
+# while the personalised ML model is being made.
 def classify_topic(image_path):
     # Placeholder function for topic classification using keyword matching
     # You can replace this with your actual topic classification logic
