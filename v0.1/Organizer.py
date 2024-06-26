@@ -73,9 +73,9 @@ def connect_to_database():
     try:
         connection = mysql.connector.connect(
             host='localhost',
-            user='Hemil',  # Replace with your MySQL username
-            password='Hemil@TopicOverflow!',  # Replace with your MySQL password
-            database='questions_db'  # Replace with your new database name
+            user='',  # Replace with your MySQL username
+            password='',  # Replace with your MySQL password
+            database=''  # Replace with your new database name
         )
         if connection.is_connected():
             print("Connected to MySQL database")
@@ -142,7 +142,7 @@ def read_metadata_from_image(image_path):
     print("")
 
 if __name__ == "__main__":
-    folder_path = r'C:\Users\Hemil Patel\Desktop\TOv0\m126\Images'
+    folder_path = r'replace_with_folder_path_of_where_the_images_are_stored'
     connection = connect_to_database()
     if connection:
         create_table(connection)
