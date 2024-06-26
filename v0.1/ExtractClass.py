@@ -1,3 +1,15 @@
+"""
+This script provides functionality to extract specific sections from PDF files as images based on text markers.
+It utilizes the PyMuPDF library to handle PDF operations such as searching for text and getting page dimensions,
+and the PIL library for image processing tasks like cropping and saving images.
+
+The main features include:
+- Searching for specified text within the PDF and retrieving its coordinates.
+- Taking screenshots of PDF sections between specified start and end markers.
+- Saving the extracted sections as images in a designated output folder.
+- Processing all PDFs in a given folder and extracting sections based on predefined text markers.
+"""
+
 from PIL import Image
 import fitz  # PyMuPDF
 import os
@@ -92,8 +104,8 @@ def process_pdfs_in_folder(folder_path, output_folder):
     return all_questions
 
 if __name__ == "__main__":
-    folder_path = r'C:\Users\Hemil Patel\Desktop\TOv0\m126'
-    output_folder = r'C:\Users\Hemil Patel\Desktop\TOv0\m126\Images'
+    folder_path = r'replace_with_folder_of_past_paper_pdfs' 
+    output_folder = r'replace_with_folder_where_you_want_to_store_the _images'
     all_extracted_questions = process_pdfs_in_folder(folder_path, output_folder)
     for question in all_extracted_questions:
         print(question)
