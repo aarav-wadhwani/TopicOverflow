@@ -1,0 +1,21 @@
+This version was created with the purpose of streamlining the whole process of the service which TopicOverflow wants to provide.
+
+What's good:
+
+1. No longer need to preprocess the data, the whole process from dividing a past paper into images, to classifying each image with its metadata has been streamlind
+upto adding it to the database. 
+
+2. Time required for topic classification is not next to nothing, the CLIP model was essentially useless and I have gotten rid of it. 
+
+3. This version should essentially help us get it intro production. It no longer has the combined pdf functionality, unfortunately. But instead when the client
+request their choice of topical past paper, the SQL function in this version returns the question which were requested. Why is this important to have?
+We can capsulate this user data (the topical past paper questions) and then use an API from our DB to the website which will then display the questions to the users. 
+
+What's not good:
+
+1. The whole ML model is fucked and its my fault for not understanding that CLIP is essentially useless for out application, and for use to apply the cosine similarity
+function we need to pre-train our own ML model. Upside is that I am learning how to do that and hopefully by next month I should figure out how to CREATE OUR VERY
+OWN Convulation Neural Network. This is will be very tough but equally rewarding and intellectualy satisfying. 
+
+Best,
+Hemil Ketan Patel.
